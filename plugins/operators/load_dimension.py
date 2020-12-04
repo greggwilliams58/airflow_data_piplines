@@ -42,7 +42,7 @@ class LoadDimensionOperator(BaseOperator):
             table_insert_sql = f"""INSERT INTO {self.table} {self.select_sql)""" 
             
             self.log.info("Clearing data from dimension table in Redshift")
-            redshift_hook.run(f"TRUNCATE TABLE {self.table);")
+            redshift_hook.run(f"TRUNCATE TABLE {self.table};")
     
         
         self.log("Loading data into dimension table in Redshift")

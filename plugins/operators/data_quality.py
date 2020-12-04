@@ -22,7 +22,7 @@ class DataQualityOperator(BaseOperator):
             self.log.info("Running data quality check")
             records= redshift_hook.get_records(self.test_query)
             if records[0][0] != self.expected_result:
-                raise ValueError(f"""Data quality check failed.  {records[0][0] does not equal {self.expected_result}""")
+                raise ValueError(f"""Data quality check failed.  {records[0][0]} does not equal {self.expected_result}""")
             else:
                 self.log.info("Data quality check passed. Records match expected results")
         

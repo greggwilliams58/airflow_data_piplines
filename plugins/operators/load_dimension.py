@@ -12,7 +12,7 @@ class LoadDimensionOperator(BaseOperator):
                  table="",
                  select_sql="",
                  append_insert=False,
-                 primary_key=""
+                 primary_key="",
                  *args, **kwargs):
 
         super(LoadDimensionOperator, self).__init__(*args, **kwargs)

@@ -4,14 +4,32 @@ from airflow.utils.decorators import apply_defaults
 from airflow.contrib.hooks.aws_hook import AwsHook
 
 class StageToRedshiftOperator(BaseOperator):
+    """
+    This extracts JSON data from an S3 bucket and copies it to staging tables in Redshift.
+    
+    Parameters
+    redshift_conn_id:   A airflow object representing redshift credentials held by airflow
+    aws_credentials_id: A airflow object representing AWS credentials
+    table:              A string representing a staging table for the data to be loaded into
+    s3_bucket:          A string representing a s3 bucket from which to access the data
+    s3_key:             A string representing a s3 key from which to access the data
+    copy_json_option:   A string representing a json file path or 'auto', mapping the JSON to table columns
+    region:             A string representing the AWS region where the S3 bucket is held
+    
+    Returns
+    None, but inserts s3 JSON data into target table
+    """
+    
+    
     ui_color = '#358140'
 
     copy_sql = """
         COPY {}
         FROM '{}'
         ACCESS_KEY_ID '{}'
+        SECRET_ACCESS_KEY '{}'
         REGION AS '{}'
-        FORMAT AS json '{}'
+        FORMAT AS json '{}';
     """
     @apply_defaults
     def __init__(self,
@@ -20,8 +38,8 @@ class StageToRedshiftOperator(BaseOperator):
         table="",
         s3_bucket="",
         s3_key="",
-        copy_json_option="auto"
-        region=""
+        copy_json_option="auto",
+        region="",
         *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)

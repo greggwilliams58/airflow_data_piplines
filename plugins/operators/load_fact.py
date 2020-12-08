@@ -3,7 +3,18 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class LoadFactOperator(BaseOperator):
-
+    """
+    Loads staging data into fact tables within redshift
+    
+    Parameters:
+    redshift_conn_id:   A airflow object representing redshift credentials held by airflow
+    table:              A string representing a fact table
+    select_sql:         A string representing a sql statement to insert data into fact table.  Taken from airflow/plugings/helpers/sql_queries.py
+    
+    Returns:
+    None, but inserts data into fact table from staging table
+    
+    """
     ui_color = '#F98866'
 
     @apply_defaults
@@ -28,4 +39,3 @@ class LoadFactOperator(BaseOperator):
         table_insert_sql = f"""INSERT INTO {self.table} {self.select_sql}"""
         
         redshift_hook.run(table_insert_sql)
-        #self.log.info('LoadFactOperator not implemented yet')

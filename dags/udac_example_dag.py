@@ -6,9 +6,18 @@ from airflow.operators import ( StageToRedshiftOperator,LoadFactOperator,
                                 LoadDimensionOperator, DataQualityOperator,PostgresOperator)
 from helpers import SqlQueries
 
-# AWS_KEY = os.environ.get('AWS_KEY')
-# AWS_SECRET = os.environ.get('AWS_SECRET')
+"""
+This is the central orchestration code for this data pipeline.  It defines the DAG, and calls the operators to perform the following tasks
+1) Start Operator - a dummy operator is used to to log the start of the pipeline
+2) Create Tables - a postgres operators is used to create the required tables in Redshift
+3) stage_events and stage_songs - a custom StagetoRedshift Operator is used to load data from Udacity S3 buckets into staging_events and staging_songs tables
+4) load_songplays_table - a custom LoadFactTable Operator is used to load data from staging table into fact table
+5) load_x_ table - a custom LoadDimensionTable operator is used to load data from staging tables into 4 dimension tables
+6) run_quality_checsk - a custom DataQualityCheck Operator is used to check that no NULL values are present in the id field of the songs_table
+7) End Operator - a dummy operator is used to log the end of the pipeline
+"""
 
+#definition of default arguements for DAG
 default_args = {
     'owner': 'udacity',
     'start_date': datetime(2019, 1, 12),
@@ -19,6 +28,7 @@ default_args = {
     'catchup':False
 }
 
+#Dag is defined here using the default arguments above
 dag = DAG('udac_example_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
@@ -111,7 +121,7 @@ run_quality_checks = DataQualityOperator(
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)
 
 
-# Order of operations
+# Order of task operation is defined here
 start_operator >> create_tables
 create_tables >> stage_events_to_redshift
 create_tables >> stage_songs_to_redshift

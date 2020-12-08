@@ -21,10 +21,10 @@ class LoadFactOperator(BaseOperator):
 
     def execute(self, context):
         
-        self.log("Getting credentials now")
+        self.log.info("Getting credentials now")
         redshift_hook = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
-        self.log("Loading data into Redshift fact table") 
+        self.log.info("Loading data into Redshift fact table") 
         table_insert_sql = f"""INSERT INTO {self.table} {self.select_sql}"""
         
         redshift_hook.run(table_insert_sql)

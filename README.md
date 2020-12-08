@@ -10,18 +10,6 @@ The purpose of this project is to build an Airflow ETL pipeline that extracts da
 - Access to Airflow GUI
 
 ### Configuration
-The following folder structure should be used:
-> airflow/dags/create_tables.sql
-> airflow/dags/udac_example_dag.py
-> airflow/plugins/__init__.py
-> airflow/plugins/helpers/__init__.py
-> airflow/plugins/sql_queries.py
-> airflow/operators/__init__.py
-> airflow/operators/data_quality.py
-> airflow/operators/load_dimension.py
-> airflow/operators/load_fact.py
-> airflow/operators/stage_redshift.py
-> 
 #### AWS credentials
 The AWS credentials should be populated within Airflow with the following values
 - Conn_id: aws_credentials
@@ -45,6 +33,18 @@ Addition Configurations/Network and Security/Publicly Accessible = Yes
 ### To execute the pipeline
 Go to the Airflow GUI, set "udac_example_dag" to ON and press the trigger_dag button on the far right.
 
+## Structure
+The following folder structure should be used:
+- airflow/dags/create_tables.sql
+- airflow/dags/udac_example_dag.py
+- airflow/plugins/__init__.py
+- airflow/plugins/helpers/__init__.py
+- airflow/plugins/sql_queries.py
+- airflow/operators/__init__.py
+- airflow/operators/data_quality.py
+- airflow/operators/load_dimension.py
+- airflow/operators/load_fact.py
+- airflow/operators/stage_redshift.py
 
 ## Explanation of files
 - `create_tables.sql` contains sql queries that create the required tables in Redshift

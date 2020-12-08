@@ -14,8 +14,8 @@ class DataQualityOperator(BaseOperator):
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
-        self.redshift_conn_id = redshift_conn_id,
-        self.test_query = test_query,
+        self.redshift_conn_id = redshift_conn_id
+        self.test_query = test_query
         self.expected_result = expected_result
         
     def execute(self, context):
@@ -24,8 +24,11 @@ class DataQualityOperator(BaseOperator):
         
         
         self.log.info("Running data quality check")
-        records= redshift_hook.get_records(self.test_query)
+        self.log.info(self.test_query)
+        records = redshift_hook.get_records(self.test_query)
         if records[0][0] != self.expected_result:
             raise ValueError(f"""Data quality check failed.  {records[0][0]} does not equal {self.expected_result}""")
         else:
             self.log.info("Data quality check passed. Records match expected results")
+        
+        #self.log.info('DataQualityOperator not implemented yet')

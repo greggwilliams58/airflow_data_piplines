@@ -18,12 +18,14 @@ class DataQualityOperator(BaseOperator):
         self.test_query = test_query,
         self.expected_result = expected_result
         
-        def execute(self, context):
-            self.log.info("Running data quality check")
-            records= redshift_hook.get_records(self.test_query)
-            if records[0][0] != self.expected_result:
-                raise ValueError(f"""Data quality check failed.  {records[0][0]} does not equal {self.expected_result}""")
-            else:
-                self.log.info("Data quality check passed. Records match expected results")
+    def execute(self, context):
+        self.log.info("Getting credentials")
+        redshift_hook = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
-        #self.log.info('DataQualityOperator not implemented yet')
+        
+        self.log.info("Running data quality check")
+        records= redshift_hook.get_records(self.test_query)
+        if records[0][0] != self.expected_result:
+            raise ValueError(f"""Data quality check failed.  {records[0][0]} does not equal {self.expected_result}""")
+        else:
+            self.log.info("Data quality check passed. Records match expected results")
